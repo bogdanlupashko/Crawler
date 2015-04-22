@@ -1,0 +1,72 @@
+<html>
+<head>
+    <title>Crawler Report $country</title>
+</head>
+
+<body>
+This page contains info about Top $countSites  sites in $country
+<br>
+
+<script type="text/javascript">
+    function highlightTableRows(tableId, hoverClass)
+    {
+        var table = document.getElementById(tableId);
+
+        if (hoverClass){
+
+            var hoverClassReg = new RegExp("\\b"+hoverClass+"\\b");
+
+            table.onmouseover = table.onmouseout = function(e)
+            {
+                if (!e) e = window.event;
+                var elem = e.target || e.srcElement;
+                while (!elem.tagName || !elem.tagName.match(/td|th|table/i))
+                    elem = elem.parentNode;
+
+                if (elem.parentNode.tagName == 'TR' && elem.parentNode.parentNode.tagName == 'TBODY') {
+                    var row = elem.parentNode;
+                    if (!row.getAttribute('clickedRow'))
+                        row.className = e.type=="mouseover"?row.className+" "+hoverClass:row.className.replace(hoverClassReg," ");
+                }
+            };
+        }
+    }
+</script>
+
+<style type="text/css">
+    table th {
+        background-color: white;
+    }
+
+    .hoverRow {
+        background-color: aliceblue;
+    }
+</style>
+
+<table id='report' cellpadding="20" cellspacing="3" border="0" style="empty-cells:show">
+
+    <tr bgcolor="$headerBackgroundColor">
+    ##        <td align="center"> <b>Order</b>
+        <td align="center"><b>Country Rank</b>
+        <td align="center"><b>Site URL</b>
+        <td align="center"><b>Global Rank</b>
+        <td align="center"><b>Link to Alexa's page with site stats</b>
+    </tr>
+
+    #foreach( $site in $sitesList )
+        <tr>
+        ##            <td>$site.order</td>
+            <td>$site.currentRank</td>
+            <td>$site.url</td>
+            <td>$site.globalRank</td>
+            <td><a href="$site.alexaUrl">$site.alexaUrl</a></td>
+        </tr>
+    #end
+
+</table>
+<script type="text/javascript">
+    highlightTableRows("report", "hoverRow");
+</script>
+
+</body>
+</html>
